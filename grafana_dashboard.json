@@ -1,0 +1,44 @@
+{
+  "dashboard": {
+    "panels": [
+      {
+        "type": "graph",
+        "title": "CPU Usage",
+        "targets": [
+          {
+            "expr": "rate(cpu_usage{core=~'core_.*'}[1m])",
+            "legendFormat": "{{core}}"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Memory Usage",
+        "targets": [
+          {
+            "expr": "memory_total",
+            "legendFormat": "Total Memory"
+          },
+          {
+            "expr": "memory_used",
+            "legendFormat": "Used Memory"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Disk Usage",
+        "targets": [
+          {
+            "expr": "disk_total",
+            "legendFormat": "Total Disk"
+          },
+          {
+            "expr": "disk_used",
+            "legendFormat": "Used Disk"
+          }
+        ]
+      }
+    ]
+  }
+}
