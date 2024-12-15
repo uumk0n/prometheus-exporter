@@ -9,6 +9,8 @@ services:
       - .env
     ports:
       - "${EXPORTER_PORT}:${EXPORTER_PORT}"
+    networks:
+      - monitoring
 
   prometheus:
     image: prom/prometheus:latest
@@ -16,10 +18,25 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
+    depends_on:
+      - exporter
+    networks:
+      - monitoring
 
   grafana:
     image: grafana/grafana:latest
     ports:
       - "3000:3000"
+    environment:
+      - GF_PROVISIONING_PATH=/etc/grafana/provisioning
     volumes:
       - ./grafana_dashboard.json:/etc/grafana/provisioning/dashboards/default.json
+      - ./grafana_datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+    depends_on:
+      - prometheus
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    driver: bridge

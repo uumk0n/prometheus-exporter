@@ -3,39 +3,49 @@
     "panels": [
       {
         "type": "graph",
-        "title": "CPU Usage",
+        "title": "CPU Usage by Core",
         "targets": [
           {
-            "expr": "rate(cpu_usage{core=~'core_.*'}[1m])",
+            "expr": "sum by(core) (rate(cpu_usage{core=~\"core_.*\"}[5m]))",
             "legendFormat": "{{core}}"
           }
-        ]
-      },
-      {
-        "type": "graph",
-        "title": "Memory Usage",
-        "targets": [
+        ],
+        "yaxes": [
           {
-            "expr": "memory_total",
-            "legendFormat": "Total Memory"
-          },
-          {
-            "expr": "memory_used",
-            "legendFormat": "Used Memory"
+            "format": "percent",
+            "label": "Usage"
           }
         ]
       },
       {
         "type": "graph",
-        "title": "Disk Usage",
+        "title": "Memory Usage (GB)",
         "targets": [
           {
-            "expr": "disk_total",
-            "legendFormat": "Total Disk"
-          },
+            "expr": "{__name__=~\"memory_(total|used)\"} / 1024 / 1024 / 1024",
+            "legendFormat": "{{__name__}}"
+          }
+        ],
+        "yaxes": [
           {
-            "expr": "disk_used",
-            "legendFormat": "Used Disk"
+            "format": "gbytes",
+            "label": "Memory"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Disk Usage (GB)",
+        "targets": [
+          {
+            "expr": "{__name__=~\"disk_(total|used)\"} / 1024 / 1024 / 1024",
+            "legendFormat": "{{__name__}}"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "gbytes",
+            "label": "Space"
           }
         ]
       }

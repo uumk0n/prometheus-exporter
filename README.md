@@ -69,23 +69,21 @@ docker-compose up --build
 
 ## 📜 PromQL запросы
 
-- **Использование процессора**:
+- **Использование процессоров**:
 
   ```promql
-  avg(rate(node_cpu_seconds_total{mode!="idle"}[5m]))
+  sum by(core) (rate(cpu_usage{core=~"core_.*"}[5m]))
   ```
 
-- **Общая и используемая память**:
+- **Память (всего и используется)**:
 
-  ```promql
-  node_memory_MemTotal_bytes
-  node_memory_MemAvailable_bytes
+  ```promql:grafana_dashboard.json
+  {__name__=~"memory_(total|used)"} / 1024 / 1024 / 1024
   ```
 
-- **Использование дисков**:
+- **Диски (всего и используется)**:
   ```promql
-  node_filesystem_size_bytes
-  node_filesystem_avail_bytes
+  {__name__=~"disk_(total|used)"} / 1024 / 1024 / 1024
   ```
 
 ---
